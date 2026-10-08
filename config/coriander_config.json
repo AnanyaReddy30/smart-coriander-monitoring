@@ -1,0 +1,178 @@
+{
+  "meta": {
+    "system": "Smart Coriander Cultivation and Quality Monitoring System",
+    "crop": "Coriander (Coriandrum sativum L.)",
+    "crop_purpose": "seed",
+    "version": "1.0",
+    "status_note": "Entries marked \"verify\" are working values chosen for the dataset-driven prototype. Confirm them against ICAR / Spices Board / your state agricultural university package of practices (and against sensor calibration) before any field use.",
+    "sensor_note": "NPK values are in mg/kg as reported by an RS-485 soil NPK probe. Such probes are indicative, not lab-grade."
+  },
+
+  "stages": [
+    {"id": "germination", "short": "GERM", "label": "Germination & seedling", "start_day": 0,  "end_day": 20, "verify": true},
+    {"id": "vegetative",  "short": "VEG",  "label": "Vegetative growth",      "start_day": 21, "end_day": 50, "verify": true},
+    {"id": "flowering",   "short": "FLWR", "label": "Flowering",              "start_day": 51, "end_day": 80, "verify": true},
+    {"id": "seed",        "short": "SEED", "label": "Seed development & maturity", "start_day": 81, "end_day": 110, "verify": true}
+  ],
+
+  "parameters": {
+    "n": {
+      "label": "Nitrogen (N)", "short": "N", "unit": "mg/kg", "kind": "nutrient", "sensor": "RS-485 NPK",
+      "verify": true,
+      "basis": "Working sufficiency bands derived from the Indian soil-fertility rating classes for available N (low below ~280 kg/ha, converted at ~2.24 kg/ha per mg/kg), raised in the vegetative stage when N demand is highest.",
+      "ranges": {
+        "germination": {"min": 100, "max": 250},
+        "vegetative":  {"min": 125, "max": 275},
+        "flowering":   {"min": 110, "max": 250},
+        "seed":        {"min": 90,  "max": 220}
+      },
+      "excess_advice": "Nitrogen is already high. Skip nitrogen fertilizer at this stage; extra N promotes leafy growth and lodging and can delay seed maturity."
+    },
+    "p": {
+      "label": "Phosphorus (P)", "short": "P", "unit": "mg/kg", "kind": "nutrient", "sensor": "RS-485 NPK",
+      "verify": true,
+      "basis": "Working bands above the Indian 'low' class for available P (about 10 kg/ha, roughly 4.5 mg/kg); P is weighted higher at germination (root establishment) and flowering (seed set).",
+      "ranges": {
+        "germination": {"min": 8, "max": 25},
+        "vegetative":  {"min": 6, "max": 25},
+        "flowering":   {"min": 8, "max": 25},
+        "seed":        {"min": 6, "max": 25}
+      },
+      "excess_advice": "Phosphorus is already high. Skip phosphatic fertilizer this cycle."
+    },
+    "k": {
+      "label": "Potassium (K)", "short": "K", "unit": "mg/kg", "kind": "nutrient", "sensor": "RS-485 NPK",
+      "verify": true,
+      "basis": "Working bands above the Indian 'low' class for available K (about 120 kg/ha, roughly 54 mg/kg); K is weighted higher toward seed filling.",
+      "ranges": {
+        "germination": {"min": 50, "max": 250},
+        "vegetative":  {"min": 55, "max": 250},
+        "flowering":   {"min": 60, "max": 250},
+        "seed":        {"min": 65, "max": 250}
+      },
+      "excess_advice": "Potassium is already high. Skip potash fertilizer this cycle."
+    },
+    "moisture": {
+      "label": "Soil moisture", "short": "Moist", "unit": "%", "kind": "environment", "sensor": "Capacitive soil moisture",
+      "verify": true,
+      "basis": "Volumetric water content (%). Needs sensor-specific calibration. Higher at germination, drier toward ripening.",
+      "ranges": {
+        "germination": {"min": 25, "max": 42},
+        "vegetative":  {"min": 22, "max": 38},
+        "flowering":   {"min": 18, "max": 35},
+        "seed":        {"min": 12, "max": 28}
+      },
+      "low_advice": "Soil is dry. Irrigate lightly and evenly.",
+      "high_advice": "Soil is too wet. Hold irrigation and check drainage (waterlogging risk)."
+    },
+    "temperature": {
+      "label": "Temperature", "short": "Temp", "unit": "°C", "kind": "environment", "sensor": "DS18B20",
+      "verify": true,
+      "basis": "Coriander prefers a cool climate while vegetative and a warmer, dry climate at flowering.",
+      "ranges": {
+        "germination": {"min": 15, "max": 28},
+        "vegetative":  {"min": 12, "max": 26},
+        "flowering":   {"min": 14, "max": 30},
+        "seed":        {"min": 16, "max": 32}
+      },
+      "low_advice": "Cold stress. Growth will slow; mulch or protect young plants.",
+      "high_advice": "Heat stress reduces growth and yield. Irrigate lightly in the evening and mulch to cool the root zone."
+    },
+    "ph": {
+      "label": "Soil pH", "short": "pH", "unit": "", "kind": "environment", "sensor": "Analog soil pH",
+      "verify": true,
+      "basis": "Coriander grows best in near-neutral, well-drained soil.",
+      "ranges": {
+        "germination": {"min": 6.0, "max": 7.5},
+        "vegetative":  {"min": 6.0, "max": 7.5},
+        "flowering":   {"min": 6.0, "max": 7.5},
+        "seed":        {"min": 6.0, "max": 7.5}
+      },
+      "low_advice": "Soil is acidic. Confirm with a lab test, then consider liming.",
+      "high_advice": "Soil is alkaline. Add organic matter or gypsum after a lab test; prefer acidifying fertilizers such as DAP."
+    },
+    "ec": {
+      "label": "Salinity (EC)", "short": "EC", "unit": "dS/m", "kind": "environment", "sensor": "Soil EC",
+      "verify": true,
+      "basis": "Coriander is sensitive to salinity, most of all at germination.",
+      "ranges": {
+        "germination": {"min": 0.1, "max": 0.8},
+        "vegetative":  {"min": 0.1, "max": 1.2},
+        "flowering":   {"min": 0.1, "max": 1.2},
+        "seed":        {"min": 0.1, "max": 1.2}
+      },
+      "low_advice": "Very low EC suggests little available nutrient.",
+      "high_advice": "Salinity is high and coriander is salt-sensitive. Leach salts with low-salt irrigation water and avoid muriate of potash (use sulphate of potash)."
+    },
+    "light": {
+      "label": "Light intensity", "short": "Light", "unit": "lux", "kind": "environment", "sensor": "BH1750",
+      "verify": true,
+      "basis": "Evaluated only in the daytime window; night readings are not judged.",
+      "ranges": {
+        "germination": {"min": 15000, "max": null},
+        "vegetative":  {"min": 15000, "max": null},
+        "flowering":   {"min": 15000, "max": null},
+        "seed":        {"min": 15000, "max": null}
+      },
+      "daytime_hours": [9, 15],
+      "low_advice": "Low midday light. Check for shading or a very dense canopy."
+    },
+    "pressure": {
+      "label": "Air pressure", "short": "Press", "unit": "hPa", "kind": "environment", "sensor": "BMP280",
+      "verify": true,
+      "basis": "Informational. A fast fall signals rain or a storm, so the app delays fertilizer application.",
+      "ranges": {
+        "germination": {"min": null, "max": null},
+        "vegetative":  {"min": null, "max": null},
+        "flowering":   {"min": null, "max": null},
+        "seed":        {"min": null, "max": null}
+      },
+      "falling_fast_hpa_per_3h": -2.0
+    },
+    "wind": {
+      "label": "Wind speed", "short": "Wind", "unit": "m/s", "kind": "environment", "sensor": "Cup anemometer",
+      "verify": true,
+      "basis": "Strong wind disturbs spraying and can lodge tall flowering plants.",
+      "ranges": {
+        "germination": {"min": null, "max": 6},
+        "vegetative":  {"min": null, "max": 8},
+        "flowering":   {"min": null, "max": 6},
+        "seed":        {"min": null, "max": 6}
+      },
+      "high_advice": "Strong wind. Delay urea broadcasting and sprays, and check plants for lodging."
+    }
+  },
+
+  "severity": {
+    "mild_max_fraction": 0.15,
+    "moderate_max_fraction": 0.40
+  },
+
+  "fertilizer_plan": {
+    "recommended_total_kg_ha": {"N": 60, "P2O5": 30, "K2O": 20},
+    "recommended_total_source": "ICAR-NRCSS, Ajmer trial on variety ACr-2 (60:30:20 kg NPK/ha). A Karnataka trial reports 60:40:20 as optimal; adjust for your soil and region.",
+    "corrective_fraction_of_total": {"N": 0.5, "P2O5": 0.5, "K2O": 0.5},
+    "severity_multiplier": {"mild": 0.5, "moderate": 1.0, "severe": 1.5},
+    "method_note": "One corrective application = recommended total dose x corrective fraction x severity multiplier. This avoids converting a probe reading straight into kg/ha, which overstates the need. Multipliers are a working design choice (verify: true).",
+    "verify": true,
+    "kg_per_acre_per_kg_per_ha": 0.4047
+  },
+
+  "products": {
+    "urea": {"name": "Urea",                        "N": 0.46},
+    "dap":  {"name": "DAP",                         "N": 0.18, "P2O5": 0.46},
+    "ssp":  {"name": "Single super phosphate",      "P2O5": 0.16},
+    "mop":  {"name": "Muriate of potash (MOP)",     "K2O": 0.60},
+    "sop":  {"name": "Sulphate of potash (SOP)",    "K2O": 0.50}
+  },
+
+  "pressure_trend_window_hours": 3,
+
+  "sources": [
+    "ICAR-NRCSS Ajmer four-year study, coriander ACr-2: 60:30:20 kg/ha NPK with 30 x 10 cm geometry",
+    "Karnataka trials cited in ICAR literature: 60:40:20 kg/ha NPK optimum",
+    "Banaras Hindu University soil-test crop response study: 4.83 kg N, 0.80 kg P2O5 and 4.10 kg K2O per quintal of grain (candidate for a future STCR-based dose equation)",
+    "PLOS One (2026) STCR prescription equations for coriander in Alfisols: coriander needs a cool climate when vegetative and a warm, dry climate at flowering",
+    "Indian soil-fertility rating classes (low / medium / high) for available N, P and K, as used on Soil Health Cards"
+  ]
+}

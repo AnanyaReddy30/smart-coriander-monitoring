@@ -1,0 +1,68 @@
+[
+  {
+    "id": "farm_a",
+    "name": "Farm A - well managed",
+    "description": "Balanced nutrients, sensible irrigation and a top-dress at day 33. One storm at day 43.",
+    "sowing_date": "2025-11-01",
+    "events": []
+  },
+  {
+    "id": "farm_b",
+    "name": "Farm B - nitrogen deficient",
+    "description": "Nitrogen runs short from day 21. Urea is applied at day 56 and the crop recovers.",
+    "sowing_date": "2025-11-01",
+    "events": [
+      {
+        "name": "n_deficiency",
+        "from_day": 21,
+        "to_day": 55
+      }
+    ]
+  },
+  {
+    "id": "farm_c",
+    "name": "Farm C - low phosphorus and potash",
+    "description": "Phosphorus is low all season and potash falls below range from about day 40. Nothing is corrected.",
+    "sowing_date": "2025-11-01",
+    "events": [
+      {
+        "name": "p_deficiency",
+        "from_day": 0,
+        "to_day": 110
+      },
+      {
+        "name": "k_deficiency",
+        "from_day": 46,
+        "to_day": 110
+      }
+    ]
+  },
+  {
+    "id": "farm_d",
+    "name": "Farm D - saline, over-fed and hot",
+    "description": "Saline water and alkaline soil, excess nitrogen early on, a heat spell in days 76-92 and uneven irrigation.",
+    "sowing_date": "2025-11-01",
+    "events": [
+      {
+        "name": "n_excess",
+        "from_day": 0,
+        "to_day": 32
+      },
+      {
+        "name": "ec_high",
+        "from_day": 0,
+        "to_day": 110
+      },
+      {
+        "name": "ph_high",
+        "from_day": 0,
+        "to_day": 110
+      },
+      {
+        "name": "heat_stress",
+        "from_day": 76,
+        "to_day": 92
+      }
+    ]
+  }
+]

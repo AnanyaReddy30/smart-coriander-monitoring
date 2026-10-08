@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Smart Coriander Cultivation and Quality Monitoring System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;700&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="top">
+    <div>
+      <h1>Smart Coriander Cultivation and Quality Monitoring System</h1>
+      <p class="sub">At every growth stage: what is lacking, and which fertilizer to apply.</p>
+    </div>
+    <p class="mode" id="modeNote">Replaying a dataset. No hardware connected.</p>
+  </header>
+
+  <nav class="tabs" role="tablist" aria-label="Sections">
+    <button role="tab" aria-selected="true"  aria-controls="tab-live"   id="t-live"   class="tab is-active">Live monitoring</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-tests"  id="t-tests"  class="tab">Test cases</button>
+    <button role="tab" aria-selected="false" aria-controls="tab-ranges" id="t-ranges" class="tab">Ideal ranges and method</button>
+  </nav>
+
+  <main id="main">
+    <!-- ================= LIVE ================= -->
+    <section id="tab-live" role="tabpanel" aria-labelledby="t-live">
+      <div class="controls">
+        <div class="farmpick" id="farmPick" role="radiogroup" aria-label="Farm"></div>
+        <div class="transport" id="transport">
+          <button id="btnPlay" class="btn btn-primary" type="button">Play</button>
+          <label class="speed">Speed
+            <select id="speed">
+              <option value="1">Slow</option>
+              <option value="4" selected>Normal</option>
+              <option value="16">Fast</option>
+            </select>
+          </label>
+          <button id="btnEnd" class="btn" type="button">Load full season</button>
+          <button id="btnRestart" class="btn" type="button">Restart</button>
+        </div>
+      </div>
+      <p class="farmdesc" id="farmDesc"></p>
+
+      <div class="dayline" aria-live="polite">
+        <strong id="dayText">Day 0</strong>
+        <span id="stageText"></span>
+        <span id="clockText"></span>
+      </div>
+
+      <div class="season panel">
+        <div class="panel-head">
+          <h2>Season at a glance</h2>
+          <p class="hint">Each column is one day of the crop cycle. Click a day to jump to it.</p>
+        </div>
+        <div class="season-wrap"><canvas id="season" height="300" aria-label="Season grid showing the status of each parameter on each day"></canvas></div>
+        <div class="legend" id="legend">
+          <span><i class="sw sw-ok"></i>Within ideal range</span>
+          <span><i class="sw sw-warn"></i>Needs attention</span>
+          <span><i class="sw sw-bad"></i>Act now</span>
+          <span><i class="sw sw-na"></i>Not evaluated</span>
+          <span><i class="sw sw-future"></i>Not replayed yet</span>
+        </div>
+        <p class="hover" id="seasonHover" aria-live="polite">Point at the grid for details.</p>
+      </div>
+
+      <div class="cols">
+        <section class="panel now" aria-labelledby="nowTitle">
+          <div class="panel-head">
+            <h2 id="nowTitle">Right now</h2>
+          </div>
+          <div id="nowBody"></div>
+          <div class="onsite" id="onsite"></div>
+        </section>
+
+        <aside class="panel readings" aria-labelledby="readTitle">
+          <div class="panel-head">
+            <h2 id="readTitle">Sensor readings</h2>
+            <p class="hint" id="readTime"></p>
+          </div>
+          <div id="readBody"></div>
+        </aside>
+      </div>
+
+      <section class="panel trend" aria-labelledby="trendTitle">
+        <div class="panel-head">
+          <h2 id="trendTitle">Trend</h2>
+          <p class="hint">The shaded band is the ideal range for each growth stage.</p>
+        </div>
+        <div class="paramtabs" id="paramTabs" role="tablist" aria-label="Parameter"></div>
+        <div class="chart-wrap"><canvas id="trendChart" height="240" aria-label="Trend chart"></canvas></div>
+      </section>
+    </section>
+
+    <!-- ================= TESTS ================= -->
+    <section id="tab-tests" role="tabpanel" aria-labelledby="t-tests" hidden>
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Controlled test cases</h2>
+          <p class="hint">Pick a case, or edit the values yourself. The same rule engine as the live view analyses them.</p>
+        </div>
+        <div class="presets" id="presets"></div>
+        <form class="testform" id="testForm" autocomplete="off">
+          <label>Day of crop <input type="number" id="f_day" min="0" max="120" step="1" value="40"></label>
+          <label>Hour of day <input type="number" id="f_hour" min="0" max="23" step="1" value="12"></label>
+          <label>Pressure change in 3 h (hPa) <input type="number" id="f_pd" step="0.1" value="0"></label>
+          <div id="f_params" class="f-params"></div>
+          <button class="btn btn-primary" type="submit">Analyse</button>
+        </form>
+      </div>
+      <div class="panel" id="testResult" aria-live="polite">
+        <div class="panel-head"><h2>Result</h2></div>
+        <div id="testExpect"></div>
+        <div id="testBody"><p class="empty">Choose a test case to see what the system recommends.</p></div>
+      </div>
+    </section>
+
+    <!-- ================= RANGES ================= -->
+    <section id="tab-ranges" role="tabpanel" aria-labelledby="t-ranges" hidden>
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Ideal ranges for each growth stage</h2>
+          <p class="hint" id="rangesNote"></p>
+        </div>
+        <div class="table-wrap"><table class="ranges" id="rangesTable"></table></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h2>How a fertilizer recommendation is worked out</h2></div>
+        <div id="methodBody" class="method"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>Data shown here is simulated from coriander agronomy literature until real sensor data is available. Ranges marked "verify" are working values to be confirmed before field use.</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
